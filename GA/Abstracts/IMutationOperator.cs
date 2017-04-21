@@ -10,7 +10,7 @@ namespace GA.Abstracts
 
     interface IMutationOperator
     {
-        void Mutation(Individual parent);
+        void Mutation(Individual parent, double mutationProbability);
     }
 
 }

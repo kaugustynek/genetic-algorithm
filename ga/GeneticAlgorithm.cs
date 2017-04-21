@@ -57,12 +57,12 @@ namespace GA
 
                         if (_random.NextDouble() < MutationProbability)
                         {
-                            _mutationOperator.Mutation(parents[j]);
+                            _mutationOperator.Mutation(parents[j], MutationProbability);
                         }
 
                         if (_random.NextDouble() < MutationProbability)
                         {
-                            _mutationOperator.Mutation(parents[j + 1]);
+                            _mutationOperator.Mutation(parents[j + 1], MutationProbability);
                         }
                     }
                 }
