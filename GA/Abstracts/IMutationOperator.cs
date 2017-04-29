@@ -7,10 +7,8 @@ using GA.BasicTypes;
 
 namespace GA.Abstracts
 {
-
-    interface IMutationOperator
+    public interface IMutationOperator
     {
-        void Mutation(Individual parent, double mutationProbability);
+        void Mutation(Individual individual, double mutationProbability);
     }
-
 }

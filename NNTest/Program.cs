@@ -10,34 +10,34 @@ namespace XorTrain
         static int PrintCallback(NeuralNet net, TrainingData train, uint max_epochs, uint epochs_between_reports, float desired_error, uint epochs, Object user_data)
         {
             Console.WriteLine(String.Format("Epochs     " + String.Format("{0:D}", epochs).PadLeft(8) + ". Current Error: " +
-                              String.Format("{0:F}", net.MSE).PadRight(8)));
+                              String.Format("{0:F5}", net.MSE).PadRight(8)));
             return 0;
         }
 
         static void XorTest()
         {
-            Console.WriteLine("\nXOR test started.");
-
-            const float learning_rate = 0.7f;
-            const uint num_layers = 3;
-            const uint num_input = 2;
-            const uint num_hidden = 3;
+            const float learning_rate = 0.9f;
+            const uint num_layers = 4;
+            const uint num_input = 1;
+            const uint num_hidden1 = 15;
+            const uint num_hidden2 = 8;
+            const uint num_hidden3 = 4;
             const uint num_output = 1;
             const float desired_error = 0.001f;
-            const uint max_iterations = 300000;
+            const uint max_iterations = 3000000;
             const uint iterations_between_reports = 1000;
 
             Console.WriteLine("\nCreating network.");
 
-            using (NeuralNet net = new NeuralNet(NetworkType.LAYER, num_layers, num_input, num_hidden, num_output))
+            using (NeuralNet net = new NeuralNet(NetworkType.LAYER, num_layers, num_input, num_hidden1, num_hidden2, num_output))
             {
                 net.LearningRate = learning_rate;
 
-                net.ActivationSteepnessHidden = 1.0F;
-                net.ActivationSteepnessOutput = 1.0F;
+                //net.ActivationSteepnessHidden = 1.0F;
+                //net.ActivationSteepnessOutput = 1.0F;
 
-                net.ActivationFunctionHidden = ActivationFunction.SIGMOID_SYMMETRIC_STEPWISE;
-                net.ActivationFunctionOutput = ActivationFunction.SIGMOID_SYMMETRIC_STEPWISE;
+                net.ActivationFunctionHidden = ActivationFunction.SIGMOID_SYMMETRIC;
+                net.ActivationFunctionOutput = ActivationFunction.SIGMOID_SYMMETRIC;
 
                 // Output network type and parameters
                 Console.Write("\nNetworkType                         :  ");
@@ -59,10 +59,14 @@ namespace XorTrain
 
                 using (TrainingData data = new TrainingData())
                 {
-                    if (data.ReadTrainFromFile("xor.data"))
+                    if (data.ReadTrainFromFile("data.txt"))
                     {
+                        data.ScaleInputTrainData(-1, 1);
+                        data.ScaleOutputTrainData(-1, 1);
+
                         // Initialize and train the network with the data
                         net.InitWeights(data);
+                        net.TrainingAlgorithm = TrainingAlgorithm.TRAIN_RPROP;
 
                         Console.WriteLine("Max Epochs " + String.Format("{0:D}", max_iterations).PadLeft(8) + ". Desired Error: " + String.Format("{0:F}", desired_error).PadRight(8));
                         net.SetCallback(PrintCallback, null);
@@ -75,12 +79,7 @@ namespace XorTrain
                             // Run the network on the test data
                             double[] calc_out = net.Run(data.Input[i]);
 
-                            Console.WriteLine("XOR test ({0}, {1}) -> {2}, should be {3}, difference = {4}",
-                                data.InputAccessor[(int)i][0].ToString("+#;-#"),
-                                data.InputAccessor[(int)i][1].ToString("+#;-#"),
-                                calc_out[0] == 0 ? 0.ToString() : calc_out[0].ToString("+#.#####;-#.#####"),
-                                data.OutputAccessor[(int)i][0].ToString("+#;-#"),
-                                Math.Abs(calc_out[0] - data.Output[i][0]));
+                            Console.WriteLine($"{data.InputAccessor[(int)i][0]}\t{data.Output[i][0]}\t{calc_out[0]}");
                         }
 
                         Console.WriteLine("\nSaving network.");

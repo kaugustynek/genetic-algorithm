@@ -4,28 +4,40 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 using GA.Extensions;
+using GA.Helpers;
 
 namespace GA.BasicTypes
 {
-    class ChromosomeType
+    public class ChromosomeType
     {
-        private static Random _random = new Random();
-        public bool[] Chromosome { get; set; }
+        public int Size { get { return Genes.Count(); } }
+
+        public bool this[int index]
+        {
+            get { return Genes[index]; }
+            set { Genes[index] = value; }
+        }
+
+        public bool[] Genes { get; set; }
         public double DecodedValue { get { return GetDecodedValue(); } }
 
         public ChromosomeType(int chromosomeSize)
         {
-            Chromosome = new bool[chromosomeSize];
+            var random = RandomProvider.Current;
 
-            for (int i = 0; i < Chromosome.Length; i++)
+            Genes = new bool[chromosomeSize];
+            for (int i = 0; i < Genes.Length; i++)
             {
-                Chromosome[i] = _random.NextBool();
+                Genes[i] = random.NextBool();
             }
         }
 
         private double GetDecodedValue()
         {
-            throw new NotImplementedException();
+            return Genes
+                .Reverse()
+                .Select((x, i) => (x ? Math.Pow(2, i) : 0))
+                .Sum();
         }
     }
 

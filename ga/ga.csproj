@@ -49,6 +49,10 @@
     <Compile Include="Abstracts\IMutationOperator.cs" />
     <Compile Include="BasicTypes\Individual.cs" />
     <Compile Include="Abstracts\ISelectionOperator.cs" />
+    <Compile Include="Helpers\RandomProvider.cs" />
+    <Compile Include="Implementations\ClassicMutationOperator.cs" />
+    <Compile Include="Implementations\OnePointCrossover.cs" />
+    <Compile Include="Implementations\RouletteWheelSelection.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Extensions\RandomExtensions.cs" />
@@ -56,9 +60,7 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Implementations\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

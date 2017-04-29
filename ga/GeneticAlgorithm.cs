@@ -48,6 +48,8 @@ namespace GA
             {
                 var parents = _selectionOperator.GenerateParentPopulation(_population);
 
+                return null;
+
                 for (int j = 0; j < _numberOfIndividuals - 1; j += 2)
                 {
                     if (_random.NextDouble() < CrossoverProbability)

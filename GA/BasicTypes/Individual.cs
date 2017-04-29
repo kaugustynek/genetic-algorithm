@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace GA.BasicTypes
 {
-    class Individual
+    public class Individual
     {
         public ChromosomeType Chromosome { get; set; }
         public double Fitness { get; set; }
@@ -19,6 +19,34 @@ namespace GA.BasicTypes
         public void UpdateFitness(Func<double, double> fitness)
         {
             Fitness = fitness(Chromosome.DecodedValue);
+        }
+
+        public void InsertGenes(int insertIndex, bool[] genes)
+        {
+            Chromosome.Genes = Chromosome.Genes
+                .Select((x, i) => i < insertIndex ? x : genes[i - insertIndex])
+                .ToArray();
+        }
+
+        public void ReplaceGenes(bool[] genes)
+        {
+            InsertGenes(0, genes);
+        }
+
+        public override string ToString()
+        {
+            var sb = new StringBuilder();
+
+            sb.Append("(");
+            foreach (var gene in Chromosome.Genes)
+            {
+                sb.Append($"{(gene ? 1 : 0)} ");
+            }
+            sb.AppendLine(")");
+
+            sb.AppendLine($"Decoded value: {Chromosome.DecodedValue}");
+
+            return sb.ToString();
         }
     }
 }
