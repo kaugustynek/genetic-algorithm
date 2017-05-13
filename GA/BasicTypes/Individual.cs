@@ -3,13 +3,18 @@ using System.Linq;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+using GA.Abstracts;
 
 namespace GA.BasicTypes
 {
-    public class Individual
+    public class Individual : ICloneable<Individual>
     {
         public ChromosomeType Chromosome { get; set; }
         public double Fitness { get; set; }
+
+        public Individual()
+        {
+        }
 
         public Individual(int chromosomeSize)
         {
@@ -47,6 +52,20 @@ namespace GA.BasicTypes
             sb.AppendLine($"Decoded value: {Chromosome.DecodedValue}");
 
             return sb.ToString();
+        }
+
+        public Individual Clone()
+        {
+            return new Individual()
+            {
+                Chromosome = Chromosome.Clone(),
+                Fitness = Fitness
+            };
+        }
+
+        object ICloneable.Clone()
+        {
+            return this.Clone();
         }
     }
 }

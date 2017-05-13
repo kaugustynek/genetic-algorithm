@@ -12,8 +12,30 @@ namespace GA
     {
         static void Main(string[] args)
         {
-            var ga = new GeneticAlgorithm(6, 6, new OnePointCrossover(), new ClassicMutationOperator(), new RouletteWheelSelection(), x => 2 * x + 1);
-            ga.RunSimulation(100);
+            double[] x1 = { 1, 2, 3, 4, 5 };
+
+            double[] y = x1.Select(m => m).ToArray();
+
+            y[1] = 50;
+
+            Console.WriteLine($"{x1[1]} != {y[1]}");
+
+            return;
+
+            Func<double, double> fitness = x => 2 * x + 1;
+            var ga = new GeneticAlgorithm(6, 10,
+                new OnePointCrossover(),
+                new ClassicMutationOperator(),
+                new RouletteWheelSelection(),
+                fitness);
+            ga.PrintStatistics = true;
+            var result = ga.RunSimulation(500);
+
+            Console.WriteLine($"x = {result.Chromosome.DecodedValue}, f = {result.Fitness}");
+
+            var ind = new Individual(10);
+            ind.ReplaceGenes(new bool[] { true, true, true, true, true, true, true, true, true, true });
+            Console.WriteLine($"x = {ind.Chromosome.DecodedValue}, f = {fitness(ind.Chromosome.DecodedValue)}");
 
             return;
 

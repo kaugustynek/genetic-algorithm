@@ -23,6 +23,7 @@ namespace GA
 
         public double CrossoverProbability { get; set; }
         public double MutationProbability { get; set; }
+        public bool PrintStatistics { get; set; }
 
         public GeneticAlgorithm(int numberOfIndividuals, int chromosomeSize,
             ICrossOperator crossOperator,
@@ -38,6 +39,7 @@ namespace GA
             _fitnessFunction = fitnessFunction;
             CrossoverProbability = 0.90;
             MutationProbability = 0.05;
+            PrintStatistics = false;
         }
 
         public Individual RunSimulation(int maxNumberOfGenerations)
@@ -48,32 +50,33 @@ namespace GA
             {
                 var parents = _selectionOperator.GenerateParentPopulation(_population);
 
-                return null;
-
                 for (int j = 0; j < _numberOfIndividuals - 1; j += 2)
                 {
                     if (_random.NextDouble() < CrossoverProbability)
                     {
                         _crossOperator.Crossover(parents[j], parents[j + 1]);
 
-
-                        if (_random.NextDouble() < MutationProbability)
-                        {
-                            _mutationOperator.Mutation(parents[j], MutationProbability);
-                        }
-
-                        if (_random.NextDouble() < MutationProbability)
-                        {
-                            _mutationOperator.Mutation(parents[j + 1], MutationProbability);
-                        }
+                        _mutationOperator.Mutation(parents[j], MutationProbability);
+                        _mutationOperator.Mutation(parents[j + 1], MutationProbability);
                     }
                 }
 
                 _population = parents;
 
                 UpdateFitness();
+
+                if (PrintStatistics)
+                {
+                    Console.WriteLine($"Generation: {i}");
+                    Console.WriteLine($"The best is: x = {TakeTheBest().Chromosome.DecodedValue}\tf = {TakeTheBest().Fitness}");
+                }
             }
 
+            return TakeTheBest();
+        }
+
+        private Individual TakeTheBest()
+        {
             return _population
                 .OrderByDescending(x => x.Fitness)
                 .FirstOrDefault();

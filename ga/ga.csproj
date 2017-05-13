@@ -49,6 +49,7 @@
     <Compile Include="Abstracts\IMutationOperator.cs" />
     <Compile Include="BasicTypes\Individual.cs" />
     <Compile Include="Abstracts\ISelectionOperator.cs" />
+    <Compile Include="Abstracts\ICloneable.cs" />
     <Compile Include="Helpers\RandomProvider.cs" />
     <Compile Include="Implementations\ClassicMutationOperator.cs" />
     <Compile Include="Implementations\OnePointCrossover.cs" />

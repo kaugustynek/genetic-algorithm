@@ -27,19 +27,28 @@ namespace GA.Implementations
                 .ToList();
         }
 
+        private Individual SelectCurrentParent(double random, Individual[] currentPopulation, List<double> distribuance)
+        {
+
+            var currentIndex = distribuance
+                .Select((x, i) => new { Index = i, Value = x })
+                .FirstOrDefault(x => x.Value > random).Index;
+
+            Console.WriteLine($"Individual: {currentIndex}");
+
+            return currentPopulation[currentIndex].Clone();
+        }
+
         public Individual[] GenerateParentPopulation(Individual[] currentPopulation)
         {
-            List<double> distribuance;
+            var random = RandomProvider.Current;
 
+            List<double> distribuance;
             CalculateDistribuance(currentPopulation, out distribuance);
 
-            Console.WriteLine("--Distribuance");
-            foreach (var item in distribuance)
-            {
-                Console.WriteLine(item);
-            }
-
-            return null;
+            return currentPopulation
+                .Select(x => SelectCurrentParent(random.NextDouble(), currentPopulation, distribuance))
+                .ToArray();
         }
     }
 }

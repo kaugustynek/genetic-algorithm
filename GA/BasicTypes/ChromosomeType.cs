@@ -5,10 +5,11 @@ using System.Text;
 using System.Threading.Tasks;
 using GA.Extensions;
 using GA.Helpers;
+using GA.Abstracts;
 
 namespace GA.BasicTypes
 {
-    public class ChromosomeType
+    public class ChromosomeType : ICloneable<ChromosomeType>
     {
         public int Size { get { return Genes.Count(); } }
 
@@ -38,6 +39,22 @@ namespace GA.BasicTypes
                 .Reverse()
                 .Select((x, i) => (x ? Math.Pow(2, i) : 0))
                 .Sum();
+        }
+
+        public ChromosomeType Clone()
+        {
+            var result = new ChromosomeType(Size);
+
+            result.Genes = Genes
+                .Select(x => x)
+                .ToArray();
+
+            return result;
+        }
+
+        object ICloneable.Clone()
+        {
+            return this.Clone();
         }
     }
 

@@ -12,9 +12,9 @@ namespace GA.Implementations
         {
             var random = RandomProvider.Current;
 
-            int crossPoint = random.Next(1, parent1.Chromosome.Genes.Count() - 1);
+            int crossPoint = random.Next(1, parent1.Chromosome.Size - 1);
 
-            Console.WriteLine($"Cross point: {crossPoint}");
+            //Console.WriteLine($"Cross point: {crossPoint}");
 
             var parent1Genome = parent1.Chromosome.Genes
                 .SkipWhile((x, i) => i < crossPoint)
