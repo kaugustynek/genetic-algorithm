@@ -12,16 +12,6 @@ namespace GA
     {
         static void Main(string[] args)
         {
-            double[] x1 = { 1, 2, 3, 4, 5 };
-
-            double[] y = x1.Select(m => m).ToArray();
-
-            y[1] = 50;
-
-            Console.WriteLine($"{x1[1]} != {y[1]}");
-
-            return;
-
             Func<double, double> fitness = x => 2 * x + 1;
             var ga = new GeneticAlgorithm(6, 10,
                 new OnePointCrossover(),
